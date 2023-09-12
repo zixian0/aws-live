@@ -109,13 +109,12 @@ def ReadEmp():
         except ClientError as e:
             logging.error(e)
 
-        url = get_object_url('howzixian-employee', 'my_object')
 
 
     finally:
         cursor.close()
 
-    return render_template('GetEmpOutput.html', staff=records, url=url)
+    return render_template('GetEmpOutput.html', staff=records, url=response)
 
 
 if __name__ == '__main__':
