@@ -19,6 +19,7 @@ db_conn = connections.Connection(
 )
 output = {}
 table = 'employee'
+s3 = boto3.client('s3')
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -83,27 +84,41 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+
 @app.route("/fetchdata", methods=['POST'])
 def ReadEmp():
     emp_id = request.form['emp_id']
 
     fetch_sql = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
+    object_key = "emp-id-" + str(emp_id) + "_image_file"
+    expiration = 3600
 
     if emp_id == "":
         return "Please enter an employee id"
 
-    try:
 
+    try:
         cursor.execute(fetch_sql, (emp_id))
         records = cursor.fetchall()
+        try:
+            response = s3.generate_presigned_url('get_object',
+                                                Params={'Bucket': custombucket,
+                                                        'Key': object_key},
+                                                ExpiresIn=expiration)
+        except ClientError as e:
+            logging.error(e)
+        return None
+        url = get_object_url('howzixian-employee', 'my_object')
 
 
     finally:
         cursor.close()
 
-    return render_template('GetEmpOutput.html', staff=records)
+    return render_template('GetEmpOutput.html', staff=records, url=url)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
+
 
