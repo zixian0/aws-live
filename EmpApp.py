@@ -108,7 +108,7 @@ def ReadEmp():
                                                 ExpiresIn=expiration)
         except ClientError as e:
             logging.error(e)
-        return None
+
         url = get_object_url('howzixian-employee', 'my_object')
 
 
