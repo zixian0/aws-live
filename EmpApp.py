@@ -4,7 +4,7 @@ import os
 import boto3
 from config import *
 
-app = Flask(__name__) 
+app = Flask(__name__)
 
 bucket = custombucket
 region = customregion
@@ -80,6 +80,26 @@ def AddEmp():
     print("all modification done...")
     return render_template('AddEmpOutput.html', name=emp_name)
 
+@app.route("/fetchdata", methods=['POST'])
+def ReadEmp():
+    emp_id = request.form['emp_id']
+
+    fetch_sql = "SELECT * FROM employee WHERE emp_id = \"%s\""
+    cursor = db_conn.cursor()
+
+    if emp_id == "":
+        return "Please enter an employee id"
+
+    try:
+
+        cursor.execute(fetch_sql, (emp_id))
+        records = cursor.fetchall()
+
+
+    finally:
+        cursor.close()
+
+    return render_template('GetEmpOutput.html', name=records)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
