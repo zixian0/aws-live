@@ -102,7 +102,7 @@ def ReadEmp():
     finally:
         cursor.close()
 
-    return render_template('GetEmpOutput.html', name=records)
+    return render_template('GetEmpOutput.html', staff=records)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
