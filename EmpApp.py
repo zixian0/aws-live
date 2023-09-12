@@ -87,7 +87,7 @@ def AddEmp():
 def ReadEmp():
     emp_id = request.form['emp_id']
 
-    fetch_sql = "SELECT * FROM employee WHERE emp_id = \"%s\""
+    fetch_sql = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
 
     if emp_id == "":
