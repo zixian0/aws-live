@@ -91,7 +91,7 @@ def ReadEmp():
 
     fetch_sql = "SELECT * FROM employee WHERE emp_id = %s"
     cursor = db_conn.cursor()
-    object_key = "emp-id-" + str(emp_id) + "_image_file"
+    object_key = "emp-id-" + str(emp_id) + "_image_file" + ".jpg"
     expiration = 3600
 
     if emp_id == "":
